@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Website</title>
+    <style>
+        /* ... existing styles ... */
+        #board {
+            display: grid;
+            grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+            gap: 10px;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+        .cell {
+            background: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 2em;
+            transition: background 0.3s;
+        }
+        .cell:hover {
+            background: #ccc;
+        }
+        #youtube-logo {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 70px;
+            height: 70px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg') no-repeat center;
+            background-size: contain;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <!-- ... existing body ... -->
+    <div class="container">
+        <h2>bupsite</h2>
+        <div id="board"></div>
+        <button onclick="resetBoard()">Reset</button>
+        <a id="youtube-logo" href="https://www.youtube.com/@buptup/videos" target="_blank"></a>
+    </div>
+    <script>
+        const board = Array(9).fill(null);
+        let turn = 'X';
+
+        function resetBoard() {
+            for (let i = 0; i < board.length; i++) {
+                board[i] = null;
+            }
+            turn = 'X';
+            drawBoard();
+        }
+
+        function drawBoard() {
+            const boardDiv = document.getElementById('board');
+            boardDiv.innerHTML = '';
+            for (let i = 0; i < board.length; i++) {
+                const cellDiv = document.createElement('div');
+                cellDiv.innerHTML = board[i] ? board[i] : '';
+                cellDiv.className = 'cell';
+                cellDiv.addEventListener('click', () => makeMove(i));
+                boardDiv.appendChild(cellDiv);
+            }
+        }
+
+        function makeMove(i) {
+            if (!board[i]) {
+                board[i] = turn;
+                turn = turn === 'X' ? 'O' : 'X';
+                drawBoard();
+            }
+        }
+
+        drawBoard();
+    </script>
+</body>
+</html>
