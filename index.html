@@ -3,7 +3,17 @@
 <head>
     <title>My First Website</title>
     <style>
-        /* ... existing styles ... */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+    
+        }
         #board {
             display: grid;
             grid-template: repeat(3, 1fr) / repeat(3, 1fr);
@@ -26,10 +36,10 @@
         }
         #youtube-logo {
             position: absolute;
-            top: 50px;
-            right: 50px;
-            width: 70px;
-            height: 70px;
+            top: 60px;
+            right: 60px;
+            width: 80px;
+            height: 80px;
             background: url('https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg') no-repeat center;
             background-size: contain;
         }
@@ -47,15 +57,29 @@
         button:hover {
             background: #444;
         }
+        #dog-image {
+            cursor: pointer;
+            width: 200px;
+            height: auto;
+            display: block;
+            margin: 50px auto; /* Adjust this value to move the image lower */
+        }
     </style>
 </head>
 <body>
-    <!-- ... existing body ... -->
+    <header>
+        <div class="container">
+            <h1>Welcome</h1>
+        </div>
+    </header>
     <div class="container">
-        <h2>bupsite</h2>
+        <p></p>
+        <h2>Tic Tac Toe Game</h2>
         <div id="board"></div>
         <button onclick="resetBoard()">Reset</button>
-        <a id="youtube-logo" href="https://www.youtube.com/@buptup/videos" target="_blank"></a>
+        <a id="youtube-logo" href="https://www.youtube.com/channel/YOUR_CHANNEL_ID" target="_blank"></a>
+        <img id="dog-image" src="dog.png" alt="Dog">
+        <audio id="bark-sound" src="bark.wav"></audio>
     </div>
     <script>
         const board = Array(9).fill(null);
@@ -90,6 +114,10 @@
         }
 
         drawBoard();
+
+        document.getElementById('dog-image').addEventListener('click', function() {
+            document.getElementById('bark-sound').play();
+        });
     </script>
 </body>
 </html>
