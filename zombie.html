@@ -152,14 +152,24 @@
             ctx.fillStyle = 'green';
             zombies.forEach(zombie => {
                 ctx.beginPath();
-                ctx.arc(zombie.x, zombie.y, 15, 0, Math.PI * 2);
+                ctx.arc(zombie.x, zombie.y, zombie.size, 0, Math.PI * 2);
                 ctx.fill();
             });
         }
 
         function spawnZombie() {
             const edge = Math.floor(Math.random() * 4);
-            let x, y;
+            let x, y, size, hits;
+
+            // 20% chance of spawning a bigger zombie
+            const isBigZombie = Math.random() < 0.2;
+            if (isBigZombie) {
+                size = 30; // Bigger size
+                hits = 10; // Takes 10 hits to kill
+            } else {
+                size = 15; // Default size
+                hits = 1; // Default hits
+            }
 
             switch (edge) {
                 case 0: // Top
@@ -180,7 +190,7 @@
                     break;
             }
 
-            zombies.push({ x, y, size: 15 });
+            zombies.push({ x, y, size, hits });
         }
 
         function shootBullet(event) {
@@ -195,8 +205,13 @@
             bullets.forEach((bullet, bulletIndex) => {
                 zombies.forEach((zombie, zombieIndex) => {
                     const dist = Math.hypot(bullet.x - zombie.x, bullet.y - zombie.y);
-                    if (dist < 15) {
-                        zombies.splice(zombieIndex, 1);
+                    if (dist < zombie.size) {
+                        zombie.hits--;
+
+                        if (zombie.hits <= 0) {
+                            zombies.splice(zombieIndex, 1);
+                        }
+
                         bullets.splice(bulletIndex, 1);
                     }
                 });
