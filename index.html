@@ -121,7 +121,7 @@
     </div>
     <button id="survive-button">Survive?</button>
     <script>
-        const pages = ['zombie', 'home', 'calculator'];
+        const pages = ['zombie', 'calculator'];
         
         document.getElementById('search-bar').addEventListener('input', function() {
             const input = this.value.toLowerCase();
@@ -146,9 +146,6 @@
             switch (query) {
                 case 'zombie':
                     window.location.href = 'zombie.html';
-                    break;
-                case 'home':
-                    window.location.href = 'index.html';
                     break;
                 case 'calculator':
                     window.location.href = 'calculator.html';
