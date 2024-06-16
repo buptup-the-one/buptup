@@ -13,6 +13,27 @@
             width: 80%;
             margin: 0 auto;
         }
+        #search-bar {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1em;
+        }
+        .suggestions {
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            background-color: white;
+            width: calc(100% - 22px);
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #eee;
+        }
         #board {
             display: grid;
             grid-template: repeat(3, 1fr) / repeat(3, 1fr);
@@ -61,7 +82,7 @@
             width: 200px;
             height: auto;
             display: block;
-            margin: 50px auto; /* Adjust this value to move the image lower */
+            margin: 50px auto;
         }
         #survive-button {
             position: absolute;
@@ -83,11 +104,14 @@
 <body>
     <header>
         <div class="container">
+            <form id="searchForm">
+                <input type="text" id="search-bar" placeholder="Search for a page..." autocomplete="off">
+                <div class="suggestions" id="suggestions"></div>
+            </form>
             <h1>Welcome</h1>
         </div>
     </header>
     <div class="container">
-        <p></p>
         <h2>Tic Tac Toe Game</h2>
         <div id="board"></div>
         <button onclick="resetBoard()">Reset</button>
@@ -97,6 +121,50 @@
     </div>
     <button id="survive-button">Survive?</button>
     <script>
+        const pages = ['zombie', 'home', 'calculator'];
+        
+        document.getElementById('search-bar').addEventListener('input', function() {
+            const input = this.value.toLowerCase();
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+            if (input) {
+                const filteredPages = pages.filter(page => page.includes(input));
+                filteredPages.forEach(page => {
+                    const suggestionDiv = document.createElement('div');
+                    suggestionDiv.textContent = page;
+                    suggestionDiv.addEventListener('click', function() {
+                        document.getElementById('search-bar').value = page;
+                        suggestions.innerHTML = '';
+                        navigateToPage(page);
+                    });
+                    suggestions.appendChild(suggestionDiv);
+                });
+            }
+        });
+
+        function navigateToPage(query) {
+            switch (query) {
+                case 'zombie':
+                    window.location.href = 'zombie.html';
+                    break;
+                case 'home':
+                    window.location.href = 'index.html';
+                    break;
+                case 'calculator':
+                    window.location.href = 'calculator.html';
+                    break;
+                // Add more cases as needed
+                default:
+                    alert('Page not found!');
+            }
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-bar').value.toLowerCase();
+            navigateToPage(query);
+        });
+
         const board = Array(9).fill(null);
         let turn = 'X';
 
