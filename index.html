@@ -236,40 +236,24 @@
             cursor: none !important;
             user-select: none; /* Disable text selection */
         }
-        
-        /* Disable dragging and selecting images, except for specific ones */
-        img {
-            -webkit-user-drag: none; 
-            user-drag: none;
-        }
-
-        /* Custom cursor image */
-        .custom-cursor img {
-            pointer-events: none; /* Prevent interaction with the custom cursor image */
-        }
     </style>
 </head>
 <body>
-    <div class="custom-cursor">
-        <img src="hand.png" style="width: 30px; height: 30px;" alt="Custom Cursor">
-    </div>
-    <img id="dog-image" src="dog.png" alt="Dog" style="cursor: pointer; width: 200px; height: auto;">
-    <div id="click-counter" style="position: fixed; bottom: 10px; right: 10px; background: #333; color: white; padding: 10px; border-radius: 5px; font-size: 1em;">Clicks: 0</div>
-    <audio id="bark-sound" src="bark.wav"></audio>
-    
     <script>
-        // Custom cursor functionality
-        const customCursor = document.querySelector('.custom-cursor');
+        // Create a new div for the custom cursor
+        const customCursor = document.createElement('div');
+        customCursor.style.position = 'fixed';
+        customCursor.style.top = '0';
+        customCursor.style.left = '0';
+        customCursor.style.pointerEvents = 'none'; // Ensure the cursor doesn't interfere with mouse events
+        customCursor.innerHTML = '<img src="hand.png" style="width: 30px; height: 30px;"/>';
+
+        // Append the custom cursor to the body
+        document.body.appendChild(customCursor);
+
+        // Update the custom cursor position based on mouse movement
         document.addEventListener('mousemove', (e) => {
             customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-        });
-
-        // Dog image click counter functionality
-        let clickCount = 0;
-        document.getElementById('dog-image').addEventListener('click', function() {
-            document.getElementById('bark-sound').play();
-            clickCount++;
-            document.getElementById('click-counter').textContent = `Clicks: ${clickCount}`;
         });
     </script>
 </body>
