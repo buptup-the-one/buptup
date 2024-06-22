@@ -99,6 +99,15 @@
         #survive-button:hover {
             background: #444;
         }
+        #click-counter {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +129,7 @@
         <audio id="bark-sound" src="bark.wav"></audio>
     </div>
     <button id="survive-button">Survive?</button>
+    <div id="click-counter">Dog Clicks: 0</div>
     <script>
         const pages = ['zombie', 'escape', 'calculator'];
         
@@ -147,13 +157,12 @@
                 case 'zombie':
                     window.location.href = 'zombie.html';
                     break;
-                      case 'escape':
+                case 'escape':
                     window.location.href = 'escape.html';
                     break;
                 case 'calculator':
                     window.location.href = 'calculator.html';
                     break;
-                // Add more cases as needed
                 default:
                     alert('Page not found!');
             }
@@ -198,15 +207,21 @@
 
         drawBoard();
 
-        document.getElementById('dog-image').addEventListener('click', function() {
-            document.getElementById('bark-sound').play();
+        let dogClickCount = 0;
+        const dogImage = document.getElementById('dog-image');
+        const barkSound = document.getElementById('bark-sound');
+        const clickCounter = document.getElementById('click-counter');
+
+        dogImage.addEventListener('click', function() {
+            barkSound.play();
+            dogClickCount++;
+            clickCounter.textContent = `Dog Clicks: ${dogClickCount}`;
         });
 
         document.getElementById('survive-button').addEventListener('click', function() {
-            window.location.href = 'zombie.html'; // Redirect to zombie.html
+            window.location.href = 'zombie.html';
         });
     </script>
-    
 </body>
 </html>
 <!DOCTYPE html>
