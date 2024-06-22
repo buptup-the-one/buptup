@@ -219,6 +219,14 @@
         /* Hide the default cursor */
         * {
             cursor: none !important;
+            user-select: none; /* Disable text selection */
+        }
+        
+        /* Disable dragging and selecting images */
+        img {
+            -webkit-user-drag: none; 
+            user-drag: none;
+            pointer-events: none; /* Prevent interaction with the image */
         }
     </style>
 </head>
