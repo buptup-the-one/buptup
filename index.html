@@ -127,7 +127,6 @@
         <button onclick="resetBoard()">Reset</button>
         <a id="youtube-logo" href="https://www.youtube.com/channel/UCP3zHPDt2RMRf_6cBWKD5MQ" target="_blank"></a>
         <img id="dog-image" src="dog.png" alt="Dog">
-        <audio id="bark-sound" src="bark.wav"></audio>
     </div>
     <button id="survive-button">Survive?</button>
     <div id="click-counter">Clicks: 0</div>
@@ -159,7 +158,7 @@
                 case 'zombie':
                     window.location.href = 'zombie.html';
                     break;
-                      case 'escape':
+                case 'escape':
                     window.location.href = 'escape.html';
                     break;
                 case 'calculator':
@@ -212,7 +211,8 @@
 
         let clickCount = 0;
         document.getElementById('dog-image').addEventListener('click', function() {
-            document.getElementById('bark-sound').play();
+            const barkSound = new Audio('bark.wav');
+            barkSound.play();
             clickCount++;
             document.getElementById('click-counter').textContent = `Clicks: ${clickCount}`;
         });
