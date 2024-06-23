@@ -47,22 +47,17 @@
             dy: 0
         };
 
-        let score = 0;
         const zombies = [];
         const bullets = [];
         const bulletSpeed = 7;
         const zombieSpeed = 2;
-        const spawnInterval = 2000;
+        const spawnInterval = 2000; // 2 seconds
+
         let lastSpawnTime = 0;
         let gameRunning = true;
-        let gamePaused = false;
-        let shootCooldown = false;
-        let mouseX = 0;
-        let mouseY = 0;
 
         function update() {
-            if (gameRunning && !gamePaused) {
-                handleGamepadInput();
+            if (gameRunning) {
                 movePlayer();
                 updateBullets();
                 updateZombies();
@@ -72,7 +67,6 @@
                 drawPlayer();
                 drawBullets();
                 drawZombies();
-                drawScore();
 
                 requestAnimationFrame(update);
             }
@@ -82,6 +76,7 @@
             player.x += player.dx;
             player.y += player.dy;
 
+            // Keep player within canvas boundaries
             if (player.x < 0) player.x = 0;
             if (player.y < 0) player.y = 0;
             if (player.x > canvas.width) player.x = canvas.width;
@@ -117,6 +112,7 @@
                 bullet.x += bullet.dx;
                 bullet.y += bullet.dy;
 
+                // Remove bullets that go off-screen
                 if (bullet.x < 0 || bullet.y < 0 || bullet.x > canvas.width || bullet.y > canvas.height) {
                     bullets.splice(index, 1);
                 }
@@ -138,6 +134,7 @@
                 zombie.x += Math.cos(angle) * zombieSpeed;
                 zombie.y += Math.sin(angle) * zombieSpeed;
 
+                // Remove zombies that collide with the player
                 const dist = Math.hypot(player.x - zombie.x, player.y - zombie.y);
                 if (dist < zombie.size + player.size) {
                     endGame();
@@ -164,29 +161,30 @@
             const edge = Math.floor(Math.random() * 4);
             let x, y, size, hits;
 
+            // 20% chance of spawning a bigger zombie
             const isBigZombie = Math.random() < 0.2;
             if (isBigZombie) {
-                size = 30;
-                hits = 10;
+                size = 30; // Bigger size
+                hits = 10; // Takes 10 hits to kill
             } else {
-                size = 15;
-                hits = 1;
+                size = 15; // Default size
+                hits = 1; // Default hits
             }
 
             switch (edge) {
-                case 0:
+                case 0: // Top
                     x = Math.random() * canvas.width;
                     y = -15;
                     break;
-                case 1:
+                case 1: // Right
                     x = canvas.width + 15;
                     y = Math.random() * canvas.height;
                     break;
-                case 2:
+                case 2: // Bottom
                     x = Math.random() * canvas.width;
                     y = canvas.height + 15;
                     break;
-                case 3:
+                case 3: // Left
                     x = -15;
                     y = Math.random() * canvas.height;
                     break;
@@ -195,17 +193,12 @@
             zombies.push({ x, y, size, hits });
         }
 
-        function shootBullet() {
-            if (!shootCooldown) {
-                const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
-                const dx = Math.cos(angle) * bulletSpeed;
-                const dy = Math.sin(angle) * bulletSpeed;
+        function shootBullet(event) {
+            const angle = Math.atan2(event.clientY - player.y, event.clientX - player.x);
+            const dx = Math.cos(angle) * bulletSpeed;
+            const dy = Math.sin(angle) * bulletSpeed;
 
-                bullets.push({ x: player.x, y: player.y, dx, dy });
-
-                shootCooldown = true;
-                setTimeout(() => shootCooldown = false, 200); // 200ms cooldown
-            }
+            bullets.push({ x: player.x, y: player.y, dx, dy });
         }
 
         function detectCollisions() {
@@ -217,19 +210,12 @@
 
                         if (zombie.hits <= 0) {
                             zombies.splice(zombieIndex, 1);
-                            score++;
                         }
 
                         bullets.splice(bulletIndex, 1);
                     }
                 });
             });
-        }
-
-        function drawScore() {
-            ctx.fillStyle = 'black';
-            ctx.font = '24px Arial';
-            ctx.fillText(`Score: ${score}`, 10, 30);
         }
 
         function endGame() {
@@ -243,7 +229,6 @@
             player.y = canvas.height / 2;
             zombies.length = 0;
             bullets.length = 0;
-            score = 0;
             restartButton.style.display = 'none';
             update();
         }
@@ -257,8 +242,6 @@
                 player.dx = -player.speed;
             } else if (e.key === 'd' || e.key === 'ArrowRight') {
                 player.dx = player.speed;
-            } else if (e.key === 'p') {
-                togglePause();
             }
         }
 
@@ -270,54 +253,20 @@
             }
         }
 
-        function togglePause() {
-            gamePaused = !gamePaused;
-            if (!gamePaused) {
-                update();
-            }
-        }
-
+        let mouseX = 0;
+        let mouseY = 0;
         function mouseMove(e) {
             mouseX = e.clientX;
             mouseY = e.clientY;
         }
 
-        function handleGamepadInput() {
-            const gamepad = navigator.getGamepads()[0];
-            if (!gamepad) return;
-
-            player.dx = gamepad.axes[0] * player.speed;
-            player.dy = gamepad.axes[1] * player.speed;
-
-            if (Math.abs(gamepad.axes[2]) > 0.1 || Math.abs(gamepad.axes[3]) > 0.1) {
-                const angle = Math.atan2(gamepad.axes[3], gamepad.axes[2]);
-                mouseX = player.x + Math.cos(angle) * 100;
-                mouseY = player.y + Math.sin(angle) * 100;
-            }
-
-            if (gamepad.buttons[7].pressed && !shootCooldown) { // Right trigger
-                shootBullet();
-            }
-
-            if (gamepad.buttons[9].pressed) { // Start button
-                togglePause();
-            }
-        }
-
         document.addEventListener('keydown', keyDown);
         document.addEventListener('keyup', keyUp);
         document.addEventListener('mousemove', mouseMove);
-        window.addEventListener('gamepadconnected', () => {
-            console.log('Gamepad connected');
-            update();
-        });
-        window.addEventListener('gamepaddisconnected', () => {
-            console.log('Gamepad disconnected');
-        });
         canvas.addEventListener('contextmenu', e => e.preventDefault());
         canvas.addEventListener('mousedown', e => {
-            if (e.button === 0) {
-                shootBullet();
+            if (e.button === 0) { // Left mouse button
+                shootBullet(e);
             }
         });
         restartButton.addEventListener('click', restartGame);
@@ -326,7 +275,6 @@
     </script>
 </body>
 </html>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
