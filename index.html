@@ -132,7 +132,7 @@
     <div id="click-counter">Clicks: 0</div>
 
     <script>
-        const pages = ['zombie', 'escape', 'calculator'];
+        const pages = ['zombie', 'escape', 'calculator,' 'store'];
         
         document.getElementById('search-bar').addEventListener('input', function() {
             const input = this.value.toLowerCase();
@@ -163,6 +163,9 @@
                     break;
                 case 'calculator':
                     window.location.href = 'calculator.html';
+                    break;
+                       case 'store':
+                    window.location.href = 'store.html';
                     break;
                 // Add more cases as needed
                 default:
