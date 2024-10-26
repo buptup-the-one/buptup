@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Frame-by-Frame Video Player</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-container" id="video-container">
+        <canvas id="canvas" width="600" height="400"></canvas>
+        <video id="video" width="600" height="400" preload="auto" style="display: none;">
+            <source src="your-video-file.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="loading-spinner" class="spinner"></div>
+        <div class="controls" id="controls">
+            <button id="play-pause" class="control-button">Play</button>
+            <button id="mute-unmute" class="control-button">Mute</button>
+            <input id="volume" type="range" min="0" max="1" step="0.1" value="1">
+            <input id="seek-bar" type="range" min="0" max="100" value="0">
+            <span id="time-display" class="time-display">0:00 / 0:00</span>
+            <button id="fullscreen" class="control-button">Fullscreen</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
