@@ -65,3 +65,38 @@
   </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Cursor Example</title>
+    <style>
+        /* Hide the default cursor */
+        * {
+            cursor: none !important;
+            user-select: none; /* Disable text selection */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Create a new div for the custom cursor
+        const customCursor = document.createElement('div');
+        customCursor.style.position = 'fixed';
+        customCursor.style.top = '0';
+        customCursor.style.left = '0';
+        customCursor.style.pointerEvents = 'none'; // Ensure the cursor doesn't interfere with mouse events
+        customCursor.innerHTML = '<img src="hand.png" style="width: 30px; height: 30px;"/>';
+
+        // Append the custom cursor to the body
+        document.body.appendChild(customCursor);
+
+        // Update the custom cursor position based on mouse movement
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+    </script>
+</body>
+</html>
